@@ -16,9 +16,10 @@ interface Action {
   addComponent: (component: Component, parentId?: number) => void;
   deleteComponent: (componentId: number) => void;
   updateComponentProps: (componentId: number, props: any) => void;
-} // 增删改
+}
 
 export const useComponetsStore = create<State & Action>((set, get) => ({
+  // 实现一个组件列表，其中有一个Page作为顶层节点；实现增删改方法
   components: [
     {
       id: 1,
