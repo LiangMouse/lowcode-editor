@@ -7,7 +7,7 @@ export interface ComponentSetter {
   label: string;
   type: string;
   [key: string]: any;
-}
+} // setter属性保存属性表单的配置
 
 export interface ComponentConfig {
   name: string;
@@ -15,6 +15,7 @@ export interface ComponentConfig {
   desc: string;
   setter?: ComponentSetter[];
   component: any;
+  stylesSetter?: ComponentSetter[];
 }
 
 interface State {
@@ -53,6 +54,19 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           name: "text",
           label: "文字",
           type: "input",
+        },
+      ],
+      // 设置栏样式中的配置项
+      stylesSetter: [
+        {
+          name: "width",
+          label: "宽度",
+          type: "inputNumber",
+        },
+        {
+          name: "height",
+          label: "高度",
+          type: "inputNumber",
         },
       ],
       desc: "按钮",
