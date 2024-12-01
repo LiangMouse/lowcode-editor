@@ -15,6 +15,7 @@ interface State {
   components: Component[];
   curComponentId?: number | null; // 当前选中的组件id,点击时设置区同步
   curComponent: Component | null; // 当前选中的组件对象
+  mode: "edit" | "preview"; // 编辑模式或预览模式
 }
 
 interface Action {
@@ -27,6 +28,7 @@ interface Action {
     replace?: boolean
   ) => void;
   setCurComponentId: (componentId: number | null) => void;
+  setMode: (mode: State["mode"]) => void;
 }
 
 export const useComponetsStore = create<State & Action>((set, get) => ({
@@ -41,6 +43,8 @@ export const useComponetsStore = create<State & Action>((set, get) => ({
   ],
   curComponentId: null,
   curComponent: null,
+  mode: "edit",
+  setMode: (mode) => set({ mode }),
   setCurComponentId: (componentId) =>
     set((state) => ({
       curComponentId: componentId,

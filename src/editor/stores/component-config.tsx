@@ -1,21 +1,26 @@
 import { create } from "zustand";
-import Container from "../materials/Container";
-import Button from "../materials/Button";
-import Page from "../materials/Page";
+import ContainerDev from "../materials/Container/dev";
+import ContainerProd from "../materials/Container/prod";
+import ButtonDev from "../materials/Button/dev";
+import ButtonProd from "../materials/Button/prod";
+import PageDev from "../materials/Page/dev";
+import PageProd from "../materials/Page/prod";
+
 export interface ComponentSetter {
   name: string;
   label: string;
   type: string;
   [key: string]: any;
-} // setter属性保存属性表单的配置
+}
 
 export interface ComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
   desc: string;
   setter?: ComponentSetter[];
-  component: any;
   stylesSetter?: ComponentSetter[];
+  dev: any;
+  prod: any;
 }
 
 interface State {
@@ -32,7 +37,8 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
       name: "Container",
       defaultProps: {},
       desc: "容器",
-      component: Container,
+      dev: ContainerDev,
+      prod: ContainerProd,
     },
     Button: {
       name: "Button",
@@ -52,11 +58,10 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
         },
         {
           name: "text",
-          label: "文字",
+          label: "文本",
           type: "input",
         },
       ],
-      // 设置栏样式中的配置项
       stylesSetter: [
         {
           name: "width",
@@ -70,13 +75,15 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
         },
       ],
       desc: "按钮",
-      component: Button,
+      dev: ButtonDev,
+      prod: ButtonProd,
     },
     Page: {
       name: "Page",
       defaultProps: {},
       desc: "页面",
-      component: Page,
+      dev: PageDev,
+      prod: PageProd,
     },
   },
   registerComponent: (name, componentConfig) =>
