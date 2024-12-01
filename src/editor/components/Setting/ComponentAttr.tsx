@@ -53,6 +53,7 @@ export function ComponentAttr() {
       </Form.Item>
       <Form.Item label="组件描述">
         <Input value={curComponent.desc} disabled />
+        {/* 以上三项不可选 */}
       </Form.Item>
       {componentConfig[curComponent.name]?.setter?.map((setter) => (
         <Form.Item key={setter.name} name={setter.name} label={setter.label}>
