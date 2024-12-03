@@ -11,6 +11,9 @@ export function useMaterailDrop(accept: string[], id: number) {
   const [{ canDrop }, drop] = useDrop(() => ({
     accept,
     drop: (item: { type: string }, monitor) => {
+      console.log("Drop accepted types:", accept);
+      console.log("Dropped item type:", item.type);
+      console.log("Can drop:", monitor.canDrop());
       const didDrop = monitor.didDrop();
       if (didDrop) {
         return;

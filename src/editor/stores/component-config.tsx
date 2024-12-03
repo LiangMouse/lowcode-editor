@@ -15,13 +15,19 @@ export interface ComponentSetter {
   [key: string]: any;
 }
 
+export interface ComponentMethod {
+  name: string;
+  label: string;
+}
+
 export interface ComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
   desc: string;
   setter?: ComponentSetter[];
   stylesSetter?: ComponentSetter[];
-  events: ComponentEvent[];
+  events?: ComponentEvent[];
+  methods?: ComponentMethod[];
   dev: any;
   prod: any;
 }
@@ -104,23 +110,6 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
       dev: ButtonDev,
       prod: ButtonProd,
     },
-    Page: {
-      name: "Page",
-      defaultProps: {},
-      desc: "页面",
-      dev: PageDev,
-      prod: PageProd,
-      events: [
-        {
-          name: "onClick",
-          label: "点击事件",
-        },
-        {
-          name: "onDoubleClick",
-          label: "双击事件",
-        },
-      ],
-    },
     Modal: {
       name: "Modal",
       defaultProps: {
@@ -144,9 +133,36 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           label: "取消事件",
         },
       ],
+      methods: [
+        {
+          name: "open",
+          label: "打开弹窗",
+        },
+        {
+          name: "close",
+          label: "关闭弹窗",
+        },
+      ],
       desc: "弹窗",
       dev: ModalDev,
       prod: ModalProd,
+    },
+    Page: {
+      name: "Page",
+      defaultProps: {},
+      desc: "页面",
+      dev: PageDev,
+      prod: PageProd,
+      events: [
+        {
+          name: "onClick",
+          label: "点击事件",
+        },
+        {
+          name: "onDoubleClick",
+          label: "双击事件",
+        },
+      ],
     },
   },
   registerComponent: (name, componentConfig) =>
