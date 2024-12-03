@@ -5,6 +5,8 @@ import ButtonDev from "../materials/Button/dev";
 import ButtonProd from "../materials/Button/prod";
 import PageDev from "../materials/Page/dev";
 import PageProd from "../materials/Page/prod";
+import ModalDev from "../materials/Modal/dev";
+import ModalProd from "../materials/Modal/prod";
 
 export interface ComponentSetter {
   name: string;
@@ -118,6 +120,33 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           label: "双击事件",
         },
       ],
+    },
+    Modal: {
+      name: "Modal",
+      defaultProps: {
+        title: "弹窗",
+      },
+      setter: [
+        {
+          name: "title",
+          label: "标题",
+          type: "input",
+        },
+      ],
+      stylesSetter: [],
+      events: [
+        {
+          name: "onOk",
+          label: "确认事件",
+        },
+        {
+          name: "onCancel",
+          label: "取消事件",
+        },
+      ],
+      desc: "弹窗",
+      dev: ModalDev,
+      prod: ModalProd,
     },
   },
   registerComponent: (name, componentConfig) =>
