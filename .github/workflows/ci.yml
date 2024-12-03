@@ -1,19 +1,30 @@
-name: GitHub Actions Build and Deploy Demo
+name: Deploy React App to GitHub Pages
+
 on:
   push:
     branches:
-      - master
+      - main # 你想监听的分支，可以根据需求改为 master 或其他分支
+
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Build and Deploy
-        uses: JamesIves/github-pages-deploy-action@master
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: dist
-          BUILD_SCRIPT: npm install && npm run build
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16" # 使用你项目需要的 Node 版本
+
+      - name: Install dependencies
+        run: npm install # 或者 yarn
+
+      - name: Build project
+        run: npm run build # 或者 yarn build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 自动生成的 GitHub Token，用于身份验证
+          publish_dir: ./build # React 项目构建输出目录
