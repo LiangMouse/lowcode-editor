@@ -1,41 +1,49 @@
-// 拖拽放置生效的Hook函数
 import { useDrop } from "react-dnd";
 import { useComponentConfigStore } from "../stores/component-config";
-import { useComponetsStore } from "../stores/components";
+import { getComponentById, useComponetsStore } from "../stores/components";
+
+export interface ItemType {
+  type: string;
+  dragType?: "move" | "add";
+  id: number;
+}
 
 export function useMaterailDrop(accept: string[], id: number) {
-  // accept: 允许放置的类型,id: 父组件的id
-  const { addComponent } = useComponetsStore();
+  const { addComponent, deleteComponent, components } = useComponetsStore();
   const { componentConfig } = useComponentConfigStore();
 
   const [{ canDrop }, drop] = useDrop(() => ({
     accept,
-    drop: (item: { type: string }, monitor) => {
-      console.log("Drop accepted types:", accept);
-      console.log("Dropped item type:", item.type);
-      console.log("Can drop:", monitor.canDrop());
+    drop: (item: ItemType, monitor) => {
       const didDrop = monitor.didDrop();
       if (didDrop) {
         return;
       }
 
-      const config = componentConfig[item.type];
+      if (item.dragType === "move") {
+        // 先删除后添加
+        const component = getComponentById(item.id, components)!;
 
-      addComponent(
-        {
-          id: new Date().getTime(),
-          name: item.type,
-          desc: config.desc,
-          props: config.defaultProps,
-        },
-        id
-      );
+        deleteComponent(item.id);
+
+        addComponent(component, id);
+      } else {
+        const config = componentConfig[item.type];
+
+        addComponent(
+          {
+            id: new Date().getTime(),
+            name: item.type,
+            desc: config.desc,
+            props: config.defaultProps,
+          },
+          id
+        );
+      }
     },
     collect: (monitor) => ({
       canDrop: monitor.canDrop(),
     }),
-    //collect 函数的作用是根据拖放操作的状态（例如是否可以放置、是否正在拖动等）来收集数据，并返回这些数据，以便在组件中使用。
-    //这里的canDrop是布尔值，表示是否可以放置。
   }));
 
   return { canDrop, drop };

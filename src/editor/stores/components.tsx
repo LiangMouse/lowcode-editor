@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface Component {
   id: number;
@@ -30,8 +31,7 @@ interface Action {
   setCurComponentId: (componentId: number | null) => void;
   setMode: (mode: State["mode"]) => void;
 }
-
-export const useComponetsStore = create<State & Action>((set, get) => ({
+const creator: StateCreator<State & Action> = (set, get) => ({
   // 实现一个组件列表，其中有一个Page作为顶层节点；实现增删改方法
   components: [
     {
@@ -109,7 +109,13 @@ export const useComponetsStore = create<State & Action>((set, get) => ({
 
       return { components: [...state.components] };
     }),
-}));
+});
+
+export const useComponetsStore = create<State & Action>()(
+  persist(creator, {
+    name: "xxx",
+  })
+);
 
 export function getComponentById(
   id: number | null,

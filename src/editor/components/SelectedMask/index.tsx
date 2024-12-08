@@ -1,20 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { getComponentById, useComponetsStore } from "../../stores/components";
-import { Dropdown, Popconfirm, Space } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 
-interface SelectedMaskProps {
+interface HoverMaskProps {
   portalWrapperClassName: string;
   containerClassName: string;
   componentId: number;
 }
 
-function SelectedMask({
+function HoverMask({
   containerClassName,
   portalWrapperClassName,
   componentId,
-}: SelectedMaskProps) {
+}: HoverMaskProps) {
   const [position, setPosition] = useState({
     left: 0,
     top: 0,
@@ -24,33 +22,16 @@ function SelectedMask({
     labelLeft: 0,
   });
 
-  const {
-    components,
-    curComponentId,
-    curComponent,
-    deleteComponent,
-    setCurComponentId,
-  } = useComponetsStore();
+  const { components } = useComponetsStore();
 
   useEffect(() => {
     updatePosition();
   }, [componentId]);
 
   useEffect(() => {
-    setTimeout(() => {
-      updatePosition();
-    }, 200);
+    updatePosition();
   }, [components]);
 
-  useEffect(() => {
-    const resizeHandler = () => {
-      updatePosition();
-    };
-    window.addEventListener("resize", resizeHandler);
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
   function updatePosition() {
     if (!componentId) return;
 
@@ -85,26 +66,9 @@ function SelectedMask({
     return document.querySelector(`.${portalWrapperClassName}`)!;
   }, []);
 
-  const curSelectedComponent = useMemo(() => {
+  const curComponent = useMemo(() => {
     return getComponentById(componentId, components);
   }, [componentId]);
-
-  function handleDelete() {
-    deleteComponent(curComponentId!);
-    setCurComponentId(null);
-  }
-
-  const parentComponents = useMemo(() => {
-    const parentComponents = [];
-    let component = curComponent;
-
-    while (component?.parentId) {
-      component = getComponentById(component.parentId, components)!;
-      parentComponents.push(component);
-    }
-
-    return parentComponents;
-  }, [curComponent]);
 
   return createPortal(
     <>
@@ -113,7 +77,7 @@ function SelectedMask({
           position: "absolute",
           left: position.left,
           top: position.top,
-          backgroundColor: "rgba(0, 0, 255, 0.1)",
+          backgroundColor: "rgba(0, 0, 255, 0.05)",
           border: "1px dashed blue",
           pointerEvents: "none",
           width: position.width,
@@ -134,49 +98,22 @@ function SelectedMask({
           transform: "translate(-100%, -100%)",
         }}
       >
-        <Space>
-          <Dropdown
-            menu={{
-              items: parentComponents.map((item) => ({
-                key: item.id,
-                label: item.desc,
-              })),
-              onClick: ({ key }) => {
-                setCurComponentId(+key);
-              },
-            }}
-            disabled={parentComponents.length === 0}
-          >
-            <div
-              style={{
-                padding: "0 8px",
-                backgroundColor: "blue",
-                borderRadius: 4,
-                color: "#fff",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {curSelectedComponent?.desc}
-            </div>
-          </Dropdown>
-          {curComponentId !== 1 && ( // 1 is the root component
-            <div style={{ padding: "0 8px", backgroundColor: "blue" }}>
-              <Popconfirm
-                title="确认删除？"
-                okText={"确认"}
-                cancelText={"取消"}
-                onConfirm={handleDelete}
-              >
-                <DeleteOutlined style={{ color: "#fff" }} />
-              </Popconfirm>
-            </div>
-          )}
-        </Space>
+        <div
+          style={{
+            padding: "0 8px",
+            backgroundColor: "blue",
+            borderRadius: 4,
+            color: "#fff",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {curComponent?.desc}
+        </div>
       </div>
     </>,
     el
   );
 }
 
-export default SelectedMask;
+export default HoverMask;
