@@ -99,11 +99,6 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           label: "高度",
           type: "inputNumber",
         },
-        {
-          name: "color",
-          label: "按钮颜色",
-          type: "colorPicker",
-        },
       ],
       events: [
         {
