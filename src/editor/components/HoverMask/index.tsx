@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { getComponentById, useComponetsStore } from "../../stores/components";
 
@@ -24,11 +24,7 @@ function HoverMask({
 
   const { components } = useComponetsStore();
 
-  useEffect(() => {
-    updatePosition();
-  }, [componentId]);
-
-  function updatePosition() {
+  const updatePosition = useCallback(() => {
     if (!componentId) return;
 
     const container = document.querySelector(`.${containerClassName}`);
@@ -54,16 +50,25 @@ function HoverMask({
       labelTop,
       labelLeft,
     });
-  }
+  }, [componentId, containerClassName]);
+
+  useEffect(() => {
+    updatePosition();
+  }, [updatePosition]);
 
   const el = useMemo(() => {
-    return document.querySelector(`.${portalWrapperClassName}`)!;
-    //! 是 非空断言操作符
-  }, []);
+    const element = document.querySelector(`.${portalWrapperClassName}`);
+    if (!element) {
+      return null;
+    }
+    return element;
+  }, [portalWrapperClassName]);
 
   const curComponent = useMemo(() => {
     return getComponentById(componentId, components);
-  }, [componentId]);
+  }, [componentId, components]);
+
+  if (!el) return null;
 
   return createPortal(
     <>

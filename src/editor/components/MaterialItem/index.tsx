@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useDrag } from "react-dnd";
 
 export interface MaterialItemProps {
@@ -9,7 +8,7 @@ export interface MaterialItemProps {
 export function MaterialItem(props: MaterialItemProps) {
   const { name } = props;
 
-  const [_, drag] = useDrag({
+  const [__unused, drag] = useDrag({
     type: name,
     //type 是当前 drag 的元素的标识，drop 的时候根据这个来决定是否 accept。
     item: {

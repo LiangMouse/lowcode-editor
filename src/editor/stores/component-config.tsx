@@ -87,6 +87,7 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           type: "input",
         },
       ],
+      // 根据这个字段进行显式的样式设置
       stylesSetter: [
         {
           name: "width",
@@ -97,6 +98,11 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           name: "height",
           label: "高度",
           type: "inputNumber",
+        },
+        {
+          name: "color",
+          label: "按钮颜色",
+          type: "colorPicker",
         },
       ],
       events: [

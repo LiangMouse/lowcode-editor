@@ -98,7 +98,7 @@ const creator: StateCreator<State & Action> = (set, get) => ({
 
       return { components: [...state.components] };
     }),
-  updateComponentStyles: (componentId, styles, replace) =>
+  updateComponentStyles: (componentId, styles) =>
     set((state) => {
       const component = getComponentById(componentId, state.components);
       if (component) {

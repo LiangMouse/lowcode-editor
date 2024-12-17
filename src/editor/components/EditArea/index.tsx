@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { useComponentConfigStore } from "../../stores/component-config";
 import { Component, useComponetsStore } from "../../stores/components";
 import HoverMask from "../HoverMask";
@@ -85,7 +85,10 @@ export function EditArea() {
           componentId={curComponentId}
         />
       )}
-      <div className="portal-wrapper"></div>
+      <div
+        className="portal-wrapper"
+        style={{ position: "absolute", top: 0, left: 0 }}
+      ></div>
     </div>
   );
 }

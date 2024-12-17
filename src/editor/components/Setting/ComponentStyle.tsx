@@ -1,14 +1,14 @@
 import { Form, Input, InputNumber, Select } from "antd";
 import { CSSProperties, useEffect, useState } from "react";
 import {
-  ComponentConfig,
   ComponentSetter,
   useComponentConfigStore,
 } from "../../stores/component-config";
 import { useComponetsStore } from "../../stores/components";
 import CssEditor from "./CssEditor";
-import { debounce } from "lodash-es";
+import { debounce } from "lodash-es"; // 编辑器中使用防抖
 import styleToObject from "style-to-object";
+// 将手写CSS转换为对象
 
 export function ComponentStyle() {
   const [form] = Form.useForm();
@@ -27,7 +27,7 @@ export function ComponentStyle() {
     form.setFieldsValue({ ...data, ...curComponent?.styles });
 
     setCss(toCSSStr(curComponent?.styles!));
-  }, [curComponent]);
+  }, [curComponent, form]);
 
   function toCSSStr(css: Record<string, any>) {
     let str = `.comp {
@@ -104,10 +104,11 @@ export function ComponentStyle() {
       {componentConfig[curComponent.name]?.stylesSetter?.map((setter) => (
         <Form.Item key={setter.name} name={setter.name} label={setter.label}>
           {renderFormElememt(setter)}
+          {/* 根据setter的类型渲染不同的组件 */}
         </Form.Item>
       ))}
       <div className="h-[200px] border-[1px] border-[#ccc]">
-        <CssEditor value={`.comp{\n\n}`} onChange={handleEditorChange} />
+        <CssEditor value={css} onChange={handleEditorChange} />
       </div>
     </Form>
   );

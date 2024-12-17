@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { getComponentById, useComponetsStore } from "../../stores/components";
 
@@ -8,7 +8,7 @@ interface HoverMaskProps {
   componentId: number;
 }
 
-function HoverMask({
+function SelectedMask({
   containerClassName,
   portalWrapperClassName,
   componentId,
@@ -24,15 +24,7 @@ function HoverMask({
 
   const { components } = useComponetsStore();
 
-  useEffect(() => {
-    updatePosition();
-  }, [componentId]);
-
-  useEffect(() => {
-    updatePosition();
-  }, [components]);
-
-  function updatePosition() {
+  const updatePosition = useCallback(() => {
     if (!componentId) return;
 
     const container = document.querySelector(`.${containerClassName}`);
@@ -60,15 +52,29 @@ function HoverMask({
       labelTop,
       labelLeft,
     });
-  }
+  }, [componentId, containerClassName]);
+
+  useEffect(() => {
+    updatePosition();
+  }, [updatePosition]);
+
+  useEffect(() => {
+    updatePosition();
+  }, [components, updatePosition]);
 
   const el = useMemo(() => {
-    return document.querySelector(`.${portalWrapperClassName}`)!;
-  }, []);
+    const element = document.querySelector(`.${portalWrapperClassName}`);
+    if (!element) {
+      return null;
+    }
+    return element;
+  }, [portalWrapperClassName]);
 
   const curComponent = useMemo(() => {
     return getComponentById(componentId, components);
-  }, [componentId]);
+  }, [componentId, components]);
+
+  if (!el) return null;
 
   return createPortal(
     <>
@@ -116,4 +122,4 @@ function HoverMask({
   );
 }
 
-export default HoverMask;
+export default SelectedMask;

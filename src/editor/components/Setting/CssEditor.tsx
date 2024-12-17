@@ -1,8 +1,6 @@
 //封装设置区的CSS编辑器，同步修改JSON内容
 import MonacoEditor, { OnMount, EditorProps } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
-import { useEffect, useRef } from "react";
-
 export interface EditorFile {
   name: string;
   value: string;

@@ -17,7 +17,7 @@ export function ComponentAttr() {
   useEffect(() => {
     const data = form.getFieldsValue();
     form.setFieldsValue({ ...data, ...curComponent?.props });
-  }, [curComponent]);
+  }, [curComponent, form]);
 
   if (!curComponentId || !curComponent) return null;
   // 没有组件被选中

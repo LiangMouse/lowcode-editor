@@ -2,8 +2,6 @@ import React, { useRef } from "react";
 import { useComponentConfigStore } from "../../stores/component-config";
 import { Component, useComponetsStore } from "../../stores/components";
 import { message } from "antd";
-import { GoToLinkConfig } from "../Setting/actions/GoToLink";
-import { ShowMessageConfig } from "../Setting/actions/ShowMessage";
 import { ActionConfig } from "../Setting/ActionModal";
 
 export function Preview() {
