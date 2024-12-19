@@ -30,6 +30,7 @@ interface Action {
   ) => void;
   setCurComponentId: (componentId: number | null) => void;
   setMode: (mode: State["mode"]) => void;
+  clearCanvas: () => void;
 }
 const creator: StateCreator<State & Action> = (set, get) => ({
   // 实现一个组件列表，其中有一个Page作为顶层节点；实现增删改方法
@@ -108,6 +109,19 @@ const creator: StateCreator<State & Action> = (set, get) => ({
       }
 
       return { components: [...state.components] };
+    }),
+  clearCanvas: () =>
+    set({
+      components: [
+        {
+          id: 1,
+          name: "Page",
+          props: {},
+          desc: "页面",
+        },
+      ],
+      curComponentId: null,
+      curComponent: null,
     }),
 });
 

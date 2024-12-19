@@ -2,7 +2,7 @@ import { Button, Space } from "antd";
 import { useComponetsStore } from "../../stores/components";
 
 export function Header() {
-  const { mode, setMode, setCurComponentId } = useComponetsStore();
+  const { mode, setMode, setCurComponentId, clearCanvas } = useComponetsStore();
 
   return (
     <div className="w-[100%] h-[100%]">
@@ -10,15 +10,20 @@ export function Header() {
         <div>低代码编辑器</div>
         <Space>
           {mode === "edit" && (
-            <Button
-              onClick={() => {
-                setMode("preview");
-                setCurComponentId(null);
-              }}
-              type="primary"
-            >
-              预览
-            </Button>
+            <>
+              <Button type="primary" onClick={clearCanvas}>
+                清空画布
+              </Button>
+              <Button
+                onClick={() => {
+                  setMode("preview");
+                  setCurComponentId(null);
+                }}
+                type="primary"
+              >
+                预览
+              </Button>
+            </>
           )}
           {mode === "preview" && (
             <Button
